@@ -6,6 +6,7 @@ import struct
 from ecdsa.ecdsa import int_to_string, string_to_int 
 from pbkdf2 import PBKDF2
 from ecdsa_functions import *
+import groestlcoin_hash
 
 BASE58=b'123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
@@ -34,6 +35,9 @@ def seed_to_master(seed, passphrase, derivation_path, hardened_items, total_addr
 	master_pubkey=S256Point.sec((string_to_int(master_pk))*G)
 	return path_gen_keylist(master_cc,master_pk, master_pubkey, derivation_path,
 		hardened_items,total_addresses, address_type, testnet)
+
+def groestl(secret):
+	return groestlcoin_hash.getHash(secret, len(secret))
 
 class Keylevel:
 	def __init__(self,chaincode, priv_key, pub_key, index, hardened, depth, fingerprint, address_type, testnet):
@@ -114,7 +118,7 @@ class Keylevel:
 		else:
 			i=self.index
 		xprvraw=prefix+bytes([self.depth])+self.fingerprint+bytes.fromhex(format(i, 'x').rjust(8, '0'))+self.CKCpriv()+b'\x00'+self.CKDpriv()
-		checksum = hash256(xprvraw)[:4]
+		checksum = groestl(xprvraw)[:4]
 		xprvfull=xprvraw+checksum
 		return encode_base58(xprvfull)
 
@@ -143,7 +147,7 @@ class Keylevel:
 		else:
 			i=self.index
 		xpubraw=prefix+bytes([self.depth])+self.fingerprint+bytes.fromhex(format(i, 'x').rjust(8, '0'))+self.CKCpriv()+self.pubkey()
-		checksum= hash256(xpubraw)[:4]
+		checksum= groestl(xpubraw)[:4]
 		xpubfull=xpubraw+checksum
 		return encode_base58(xpubfull)
 
@@ -225,7 +229,7 @@ def indv_priv_key(secret, testnet=True):
 		raw=b"\xEF"+secret+ b'\x01'
 	else:
 		raw=b"\x80"+secret+ b'\x01'
-	raw = raw +hash256(raw)[:4]
+	raw = raw +groestl(raw)[:4]
 	addr = encode_base58(raw)
 	return addr
 
@@ -234,8 +238,8 @@ def indv_P2PKH_pub_key(pubkey,testnet=True):
 	if testnet:
 		raw = b'\x6F' + h160
 	else:
-		raw = b"\x00" + h160 
-	raw = raw + hash256(raw)[:4]
+		raw = b"\x24" + h160 
+	raw = raw + groestl(raw)[:4]
 	addr = encode_base58(raw)
 	return str(addr,'utf-8')
 
@@ -246,7 +250,7 @@ def indv_P2WPKH_P2SH_pub_key(pubkey,testnet=True):
 		raw = b'\xC4' + redeemscript
 	else:
 		raw = b'\x05'+redeemscript
-	raw = raw + hash256(raw)[:4]
+	raw = raw + groestl(raw)[:4]
 	addr = encode_base58(raw)
 	return str(addr,'utf-8')
 
@@ -256,7 +260,7 @@ def indv_P2SH_pub_key(pubkey,testnet=True):
 		raw = b'\xC4' + h160
 	else:
 		raw = b'\x05'+h160
-	raw = raw + hash256(raw)[:4]
+	raw = raw + groestl(raw)[:4]
 	addr = encode_base58(raw)
 	return str(addr,'utf-8')
 
@@ -264,17 +268,17 @@ def indv_P2SH_pub_key(pubkey,testnet=True):
 def indv_P2WPKH_pub_key(pubkey,testnet=True):
 	h160 = hash160(pubkey)
 	if testnet:
-		addr=encode_bech32('tb', 0, h160)
+		addr=encode_bech32('tgrs', 0, h160)
 	else:
-		addr=encode_bech32('bc', 0, h160)
+		addr=encode_bech32('grs', 0, h160)
 	return addr
 
 def indv_P2WSH_pub_key(pubkey, testnet=True):
 	witnessprog=hashlib.sha256(pubkey).digest()
 	if testnet:
-		addr=encode_bech32('tb', 0, witnessprog)
+		addr=encode_bech32('tgrs', 0, witnessprog)
 	else:
-		addr=encode_bech32('bc', 0, witnessprog)
+		addr=encode_bech32('grs', 0, witnessprog)
 	return addr
 
 def p2wpkh_p2sh_redeemscript(pubkey):

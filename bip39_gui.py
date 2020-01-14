@@ -527,17 +527,17 @@ def address_combo_func(data):
     selection=address_data[data]
     if selection=='bip44':
         ui.derivationpath_box.setDisabled(True)
-        ui.derivationpath_box.setText("m/44'/0'/0'/0")
+        ui.derivationpath_box.setText("m/44'/17'/0'/0")
         ui.hardened_checkbox.setDisabled(True)
         ui.hardened_checkbox.setChecked(False)
     elif selection=='bip49':
         ui.derivationpath_box.setDisabled(True)
-        ui.derivationpath_box.setText("m/49'/0'/0'/0")
+        ui.derivationpath_box.setText("m/49'/17'/0'/0")
         ui.hardened_checkbox.setDisabled(True)
         ui.hardened_checkbox.setChecked(False)
     elif selection=='bip84':
         ui.derivationpath_box.setDisabled(True)
-        ui.derivationpath_box.setText("m/84'/0'/0'/0")
+        ui.derivationpath_box.setText("m/84'/17'/0'/0")
         ui.hardened_checkbox.setDisabled(True)
         ui.hardened_checkbox.setChecked(False)
     elif selection=='bip141':
@@ -632,15 +632,15 @@ def seed_button():
         if address_type=='bip44':
             address_type='p2pkh'
             hardened_items = [False, True, True, True, False, False]
-            derivation_path = [44, 0, 0, 0, ]
+            derivation_path = [44, 17, 0, 0, ]
         elif address_type=='bip49':
             address_type='p2wpkh-p2sh'
             hardened_items = [False, True, True, True, False, False]
-            derivation_path = [49, 0, 0, 0, ]
+            derivation_path = [49, 17, 0, 0, ]
         elif address_type=='bip84':
             address_type='p2wpkh'
             hardened_items = [False, True, True, True, False, False]
-            derivation_path = [84, 0, 0, 0, ]
+            derivation_path = [84, 17, 0, 0, ]
         elif address_type=='bip141':
             address_type='p2wpkh-p2sh' 
             hardened_items[-1]=False
