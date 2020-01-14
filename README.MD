@@ -11,6 +11,7 @@ Tested with python version 3.6
 PyQt5
 pbkdf2
 ecdsa
+groestlcoin_hash
 ```
 ## USAGE
 <pre>
