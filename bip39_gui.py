@@ -711,7 +711,10 @@ def create_multisig(sig_total):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    app.setWindowIcon(QtGui.QIcon('app_icon.png'))
+    appicon = 'app_icon.png'
+    if sys.platform == 'win32':
+        appicon = 'app-icon.ico'
+    app.setWindowIcon(QtGui.QIcon(appicon))
     Bip39Tool = QtWidgets.QDialog()
     ui = Ui_Bip39Tool()
     ui.setupUi(Bip39Tool)
