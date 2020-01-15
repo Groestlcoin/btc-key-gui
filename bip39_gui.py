@@ -440,7 +440,7 @@ class Ui_Bip39Tool(object):
 
     def retranslateUi(self, Bip39Tool):
         _translate = QtCore.QCoreApplication.translate
-        Bip39Tool.setWindowTitle(_translate("Bip39Tool", "Bip 39 Tool"))
+        Bip39Tool.setWindowTitle(_translate("Bip39Tool", "Bip 39 Key Tool"))
         self.word1_box.setPlaceholderText(_translate("Bip39Tool", "Word1 / Multisig Pubkey 1"))
         self.word12_box.setPlaceholderText(_translate("Bip39Tool", "Word12 / Multisig Pubkey 12"))
         self.textfile_CheckBox.setText(_translate("Bip39Tool", "Output to Textfile"))
